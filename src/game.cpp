@@ -158,57 +158,59 @@ bool Game::init(std::string cfg_file_path){
 }
 
 void Game::handleEvents(){
-	SDL_PollEvent(&m_event);
-	if(m_event.type==SDL_EVENT_QUIT) m_running = false;
+	while (SDL_PollEvent(&m_event)){
+		if(m_event.type==SDL_QUIT) m_running = false;
 
-	//all code below is for what happens if you press (any) mouse button -----------
-	if(m_event.button.down==true){ 
-		int r = (int) m_event.button.y / (int)cell[0][0].getSize();
-		int c = (int) m_event.button.x / (int)cell[0][0].getSize();
-		SDL_Log("Cell clicked: %i, %i", r, c);
+		//all code below is for what happens if you press (any) mouse button -----------
+		if(m_event.type==SDL_MOUSEBUTTONDOWN){
+			int r = (int) m_event.button.y / (int)cell[0][0].getSize();
+			int c = (int) m_event.button.x / (int)cell[0][0].getSize();
+			SDL_Log("Cell clicked: %i, %i", r, c);
 		
-		//sets cell to alive or dead
-		cell[r][c].setAlive(!cell[r][c].getAlive());
-		/*
-		//if cell is alive add it to live_list
-		if(cell[r][c].getAlive()){
-			//checks if cell is already on the list
-			bool found = false;
-			for(int i=0; i<live_list.size(); i++){
-				if(live_list[i]==cell[r][c]){
-					found = true;
-					break;
+			//sets cell to alive or dead
+			cell[r][c].setAlive(!cell[r][c].getAlive());
+			/*
+			//if cell is alive add it to live_list
+			if(cell[r][c].getAlive()){
+				//checks if cell is already on the list
+				bool found = false;
+				for(int i=0; i<live_list.size(); i++){
+					if(live_list[i]==cell[r][c]){
+						found = true;
+						break;
+					}
+				}
+				//if it's not on the list, add it
+				if(!found){
+					live_list.push_back(cell[r][c]);	
 				}
 			}
-			//if it's not on the list, add it
-			if(!found){
-				live_list.push_back(cell[r][c]);	
-			}
-		}
-		//if cell isn't alive, remove it from the live list
-		else{
-			//checks if cell is on the list
-			for(int i=0; i<live_list.size(); i++){
-				//if it is, erase it
-				if(live_list[i]==cell[r][c]){
-					live_list.erase(live_list.begin() + i);
-					break;
+			//if cell isn't alive, remove it from the live list
+			else{
+				//checks if cell is on the list
+				for(int i=0; i<live_list.size(); i++){
+					//if it is, erase it
+					if(live_list[i]==cell[r][c]){
+						live_list.erase(live_list.begin() + i);
+						break;
+					}
 				}
 			}
+			*/
 		}
-		*/
+		//if you press enter it should step the simulation
+		if(m_event.type == SDL_KEYDOWN){
+			switch(m_event.key.keysym.sym){
+				case SDLK_SPACE:
+					m_step = true;
+					break;
+			}
+		}
 	}
 	//---------------------------------------------------------------------
 
-	//if you press enter it should step the simulation
-	if(m_event.key.type == SDL_EVENT_KEY_DOWN){
-		switch(m_event.key.key){
-			case SDLK_SPACE:
-				m_step = true;
-				break;
-		}
-	}
 }
+
 
 void Game::update(){
 
