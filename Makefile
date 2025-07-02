@@ -1,3 +1,16 @@
-make:
-	clear
-	g++ src/*.cpp -o cgol -lSDL3 -I'include/' -std=c++23
+CC=g++
+CFLAGS=-g -Wall -std=c++20
+LIB_FLAGS=-lSDL3
+
+cgol: game.cpp.o cells.cpp.o main.cpp.o
+	$(CC) -o $@ $^ $(LIB_FLAGS)
+
+game.cpp.o: src/game.cpp include/game.hpp
+	$(CC) -c -o $@ $< -I'include/' $(CFLAGS)
+
+cells.cpp.o: src/cells.cpp include/cells.hpp
+	$(CC) -c -o $@ $< -I'include/' $(CFLAGS)
+
+main.cpp.o: src/main.cpp include/game.hpp
+	$(CC) -c -o $@ $< -I'include/' $(CFLAGS)
+
