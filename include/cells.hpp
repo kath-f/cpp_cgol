@@ -10,7 +10,6 @@ private:
 	SDL_FRect m_rect;
 	bool m_alive;
 
-	std::string m_id;
 public:
 	int neighbour_count;
 
@@ -21,7 +20,6 @@ public:
 	float getX();
 	float getY();
 	bool getAlive();
-//	bool operator==(const Cell* cell);
 
 	void setAlive(bool val);
 };
